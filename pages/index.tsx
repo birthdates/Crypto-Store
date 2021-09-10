@@ -7,7 +7,7 @@ import clsx from "clsx";
 import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import { useEffect, useRef, useState } from "react";
-import { DropDown } from "../components/DropDown";
+import { DropDown, DropDownItem } from "../components/DropDown";
 import { formatCurrency } from "../utils/locale";
 import Header from "../components/Header";
 import Loading from "../components/Loading";
@@ -19,7 +19,7 @@ type Currency = {
 };
 
 const Home: NextPage = () => {
-  const currencyOptions = [
+  const currencyOptions: Array<DropDownItem> = [
     { name: "Bitcoin", id: "BTC" },
     { name: "Ethereum", id: "ETH" },
     { name: "Litecoin", id: "LTC" },

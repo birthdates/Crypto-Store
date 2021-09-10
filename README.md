@@ -4,14 +4,23 @@ This is a NextJS application that uses [CoinPayments](https://www.coinpayments.n
 
 It works with both Buycraft (requires Enterprise plan) & Crafting Store (requires Silver plan) via giftcards.
 
+# Requirements
+
+- NodeJS >= 12.0
+- Redis
+
+# Previews
+
+You can view previews [here](https://github.com/birthdates/Crypto-Store/tree/staging/previews/)
+
 # Instructions
 
 If you are going to use the Docker container, you can do:
 
 ```
 git clone https://github.com/birthdates/Crypo-Store.git .
-docker build -t crypo-site .
-docker run -p 3000:3000 -t crypo-site
+docker build -t crypo-store .
+docker run -p 3000:3000 -t crypo-store
 ```
 
 However if you aren't going to use the Docker container, you can manually run the server via setting the environment variables that you can find in the Dockerfile then run: `node server.js`.
@@ -62,6 +71,8 @@ Then you can add an option to the dropdown list like: `{ name: "Bitcoin", id: "B
 ## How can I make a test transaction?
 
 When in the development environment, the Litecoin Testnet coin will be available when creating a transaction. You can receive testnet coins from many online facuets including CoinPayments. With this you can test transactions and your IPN url.
+
+** Make sure to not run your production website in the development environment **
 
 # Styling
 
