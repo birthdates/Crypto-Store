@@ -72,6 +72,8 @@ Then you can add an option to the dropdown list like: `{ name: "Bitcoin", id: "B
 
 When in the development environment, the Litecoin Testnet coin will be available when creating a transaction. You can receive testnet coins from many online facuets including CoinPayments. With this you can test transactions and your IPN url.
 
+** Make sure to not run your production website in the development environment **
+
 # Styling
 
 The current styling of the website is very barren as it's meant to be designed to your liking (i.e your logo, background, navbar).
