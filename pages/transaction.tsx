@@ -9,11 +9,16 @@ import { formatCurrency } from "../utils/locale";
 import { TransactionWithStatus } from "../utils/transaction";
 
 const Transaction: NextPage = () => {
+  // States
   const router = useRouter();
   const [status, setStatus] = useState<TransactionWithStatus>(null as any);
   const [conversion, setConversion] = useState<number>(null as any);
   const [loading, setLoading] = useState(false);
 
+  /*
+    Fetch our current transaction and if we don't have one, redirect to main page.
+    If we do have one, fetch the conversion rate.
+  */
   useEffect(() => {
     const fetchStatus = () => {
       fetch("/api/transactionStatus")
@@ -35,6 +40,7 @@ const Transaction: NextPage = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Cancel our current transaction then redirect to the main page.
   const cancel = () => {
     setLoading(true);
     fetch("/api/cancelTransaction", {

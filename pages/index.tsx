@@ -12,7 +12,6 @@ import { formatCurrency } from "../utils/locale";
 import Header from "../components/Header";
 import Loading from "../components/Loading";
 import Link from "next/link";
-import { generateGiftcard } from "../utils/giftcard";
 
 type Currency = {
   short: string;
@@ -34,10 +33,13 @@ const Home: NextPage = () => {
   if (process.env.NODE_ENV !== "production")
     currencyOptions.push({ name: "Litcoin Test", id: "LTCT" });
 
+  // Current selected currency (input)
   const [currency, setCurrency] = useState<Currency>({
     short: "BTC",
     name: "Bitcoin",
   });
+
+  // Try to find cached currency option
   useEffect(() => {
     const persistentCurrency = localStorage.getItem("currency");
     if (!persistentCurrency) return;
@@ -45,6 +47,8 @@ const Home: NextPage = () => {
     if (!jsonCurrency) return;
     setCurrency(jsonCurrency);
   }, []);
+
+  // States
   const [showDropDown, setShowDropDown] = useState(false);
   const router = useRouter();
   const [error, setError] = useState<any>(null);
@@ -52,6 +56,8 @@ const Home: NextPage = () => {
   const [loading, setLoading] = useState("none");
   const [hasTransaction, setHasTransaction] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+
+  // Try to fetch if we already have an open transaction
   useEffect(() => {
     fetch("/api/transactionStatus")
       .then((data) => data.json())
@@ -60,16 +66,18 @@ const Home: NextPage = () => {
       })
       .catch(() => {});
   }, []);
-  const usdRef = useRef<HTMLInputElement>();
 
+  // Ref for the USD & Crypto input
+  const usdRef = useRef<HTMLInputElement>();
+  const cryptoRef = useRef<HTMLInputElement>();
+
+  // Set our selected currency and cache it
   const setCurrencyPersistent = (currency: Currency) => {
     setCurrency(currency);
     localStorage.setItem("currency", JSON.stringify(currency));
   };
 
-  const cryptoRef = useRef<HTMLInputElement>();
-  let inputTimeout = useRef<NodeJS.Timeout>(null as any);
-
+  // Encode form data for application/x-www-form-urlencoded
   const encodeForm = (formData: FormData): string => {
     var output = "";
     function encode(str: string) {
@@ -87,6 +95,7 @@ const Home: NextPage = () => {
     return output;
   };
 
+  // Send an error via an alert box
   const sendError = (message: string) => {
     setError(message);
     if (errorTimeout) {
@@ -100,6 +109,7 @@ const Home: NextPage = () => {
     );
   };
 
+  // Called on submit, submit our current form data
   const onSubmit = async (event: any) => {
     event.preventDefault();
     setLoading("form");
@@ -128,6 +138,8 @@ const Home: NextPage = () => {
     router.push("/transaction");
   };
 
+  // Timeout until we update the currency input (USD or Crypto)
+  let inputTimeout = useRef<NodeJS.Timeout>(null as any);
   const onInputChange = async (
     value: number,
     to: string,
