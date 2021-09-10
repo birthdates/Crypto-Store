@@ -51,8 +51,8 @@ const Home: NextPage = () => {
   // States
   const [showDropDown, setShowDropDown] = useState(false);
   const router = useRouter();
-  const [error, setError] = useState<string>(null!);
-  const [errorTimeout, setErrorTimeout] = useState<NodeJS.Timeout>(null!);
+  const [error, setError] = useState<any>(null);
+  const [errorTimeout, setErrorTimeout] = useState<any>(null);
   const [loading, setLoading] = useState("none");
   const [hasTransaction, setHasTransaction] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -103,8 +103,8 @@ const Home: NextPage = () => {
     }
     setErrorTimeout(
       setTimeout(() => {
-        setError(null!);
-        setErrorTimeout(null!);
+        setError(null);
+        setErrorTimeout(null);
       }, 5000)
     );
   };
@@ -139,7 +139,7 @@ const Home: NextPage = () => {
   };
 
   // Timeout until we update the currency input (USD or Crypto)
-  let inputTimeout = useRef<NodeJS.Timeout>(null!);
+  let inputTimeout = useRef<NodeJS.Timeout>(null as any);
   const onInputChange = async (
     value: number,
     to: string,
@@ -217,14 +217,14 @@ const Home: NextPage = () => {
             <input
               autoComplete="off"
               type="number"
-              ref={cryptoRef!}
+              ref={cryptoRef as any}
               min="0"
               step="0.000000000000000001"
               onChange={(event) =>
                 onInputChange(
                   parseFloat(event.target.value),
                   currency.short,
-                  usdRef.current!,
+                  usdRef.current as any,
                   false
                 )
               }
@@ -260,9 +260,9 @@ const Home: NextPage = () => {
                           name: val.name,
                         });
                         onInputChange(
-                          parseFloat(cryptoRef.current?.value ?? "0"),
+                          cryptoRef.current?.value as any,
                           val.id,
-                          usdRef.current!,
+                          usdRef.current as any,
                           false
                         );
                       }}
@@ -286,13 +286,13 @@ const Home: NextPage = () => {
               type="number"
               min="0"
               step="0.000000000000000001"
-              ref={usdRef!}
+              ref={usdRef as any}
               name="amount"
               onChange={(event) =>
                 onInputChange(
                   parseFloat(event.target.value),
                   currency.short,
-                  cryptoRef.current!,
+                  cryptoRef.current as any,
                   true
                 )
               }

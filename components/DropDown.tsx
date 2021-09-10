@@ -37,7 +37,7 @@ export const DropDown: NextPage<{
 
   useEffect(() => {
     const click = (event: MouseEvent) => {
-      if (isDescendant(element.current!, event.target!)) {
+      if (isDescendant(element.current as any, event.target as any)) {
         return;
       }
       document.removeEventListener("click", click);

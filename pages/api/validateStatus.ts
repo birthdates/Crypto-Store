@@ -59,7 +59,7 @@ export default async function handler(
       status === "2" || status === "100"
         ? {
             card: generateGiftcard(
-              (await convertCurrency(amount!, "USD", currency)).toString()
+              (await convertCurrency(amount as any, "USD", currency)).toString()
             ),
           }
         : undefined;

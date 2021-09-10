@@ -11,8 +11,8 @@ import { TransactionWithStatus } from "../utils/transaction";
 const Transaction: NextPage = () => {
   // States
   const router = useRouter();
-  const [status, setStatus] = useState<TransactionWithStatus>(null!);
-  const [conversion, setConversion] = useState<number>(null!);
+  const [status, setStatus] = useState<TransactionWithStatus>(null as any);
+  const [conversion, setConversion] = useState<number>(null as any);
   const [loading, setLoading] = useState(false);
 
   /*

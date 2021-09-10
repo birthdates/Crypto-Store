@@ -9,14 +9,14 @@ const Loading: NextPage<{ element?: HTMLElement; loading: boolean }> = ({
   const ref = useRef<HTMLElement>();
   const foundElement: HTMLElement = !!element
     ? element
-    : ref.current?.parentElement!;
+    : (ref.current?.parentElement as any);
   if (foundElement) {
     foundElement.style.opacity = loading ? "0.5" : "1";
   }
 
   return (
     <div
-      ref={ref!}
+      ref={ref as any}
       className={clsx(
         "absolute w-full h-full flex z-20 opacity-100 text-white justify-center justify-items-center items-center",
         {
