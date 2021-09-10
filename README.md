@@ -1,4 +1,4 @@
-# Crypo-Store
+# Crypo-Store ![Workflow](https://github.com/birthdates/Crypto-Store/actions/workflows/build.yml/badge.svg)
 
 This is a NextJS application that uses [CoinPayments](https://www.coinpayments.net/) to ensure secure crypto payments in a lot of different crypocurrencies.
 
@@ -58,6 +58,10 @@ First, you will need to support the currency in your CoinPayment settings.
 Then, you can put a picture (icon, edge-to-edge), of the icon in the `public/icons/CURRENCY_SHORT.png` (example: `public/icons/BTC.png` is Bitcoin).
 
 Then you can add an option to the dropdown list like: `{ name: "Bitcoin", id: "BTC" }`. To remove a cryptocurrency, do the reverse.
+
+## How can I make a test transaction?
+
+When in the development environment, the Litecoin Testnet coin will be available when creating a transaction. You can receive testnet coins from many online facuets including CoinPayments. With this you can test transactions and your IPN url.
 
 # Styling
 
