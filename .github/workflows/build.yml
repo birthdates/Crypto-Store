@@ -2,9 +2,7 @@ name: Project Build
 
 on:
   push:
-    branches: [staging]
-  push:
-    branches: [master]
+    branches: [staging, master]
   pull_request:
     branches: [staging]
   workflow_dispatch:
