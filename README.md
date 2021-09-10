@@ -19,8 +19,8 @@ If you are going to use the Docker container, you can do:
 
 ```
 git clone https://github.com/birthdates/Crypo-Store.git .
-docker build -t crypo-site .
-docker run -p 3000:3000 -t crypo-site
+docker build -t crypo-store .
+docker run -p 3000:3000 -t crypo-store
 ```
 
 However if you aren't going to use the Docker container, you can manually run the server via setting the environment variables that you can find in the Dockerfile then run: `node server.js`.
