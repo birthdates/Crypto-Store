@@ -4,6 +4,15 @@ This is a NextJS application that uses [CoinPayments](https://www.coinpayments.n
 
 It works with both Buycraft (requires Enterprise plan) & Crafting Store (requires Silver plan) via giftcards.
 
+# Requirements
+
+- NodeJS >= 12.0
+- Redis
+
+# Previews
+
+You can view previews [here](https://github.com/birthdates/Crypto-Store/tree/staging/previews/)
+
 # Instructions
 
 If you are going to use the Docker container, you can do:
