@@ -253,7 +253,7 @@ const Home: NextPage = () => {
               <div className="relative justify-center items-center flex">
                 <FontAwesomeIcon icon={faAngleDown} />
                 {showDropDown && (
-                  <div className="absolute top-5 lg:top-8 right-0 lg:right-0 lg:left-2 w-52 lg:w-60 z-40">
+                  <div className="absolute top-5 lg:top-8 right-0 lg:right-0 lg:left-2 w-52 lg:w-64 z-40">
                     <DropDown
                       close={() => setShowDropDown(false)}
                       setOtherValue={(val) => {
