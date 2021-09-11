@@ -67,7 +67,12 @@ export const DropDown: NextPage<{
             src={`/icons/${option.id}.png`}
             alt={`${option.id} Icon`}
           />
-          <span className="leading-loose ml-3">{option.name}</span>
+          <span className="leading-loose ml-3">
+            {option.name}{" "}
+            <span className="hidden lg:inline">
+              (<span className="text-white">{option.id}</span>)
+            </span>
+          </span>
           {value?.id === option.id && (
             <FontAwesomeIcon
               className="leading-loose mt-2 fill-current text-green-500 ml-1 "
