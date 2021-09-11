@@ -17,6 +17,7 @@ export type RateLimitConfig = {
  */
 export const RateLimit = (config: RateLimitConfig) => {
   return async (req: NextApiRequest, res: NextApiResponse) => {
+    if (!req.socket) return false;
     const address: string = req.socket.remoteAddress as string;
     const key: string = `ratelimits-${config.id}-${address}`;
     const amount: number = await incr(key);
