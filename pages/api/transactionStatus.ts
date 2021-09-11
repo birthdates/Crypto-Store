@@ -23,7 +23,7 @@ export default async function handler(
 ) {
   if (!rateLimit(req, res)) return;
   if (!Authentication(req, res)) {
-    res.status(403).json({ error: "No session" });
+    res.status(403).json({ error: "Forbidden" });
     return;
   }
 
