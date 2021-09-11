@@ -191,7 +191,7 @@ const Home: NextPage = () => {
               </div>
               <span
                 className={clsx(
-                  "absolute -top-2 -right-56 bg-gray-600 p-3 rounded-md text-white text-sm",
+                  "absolute -top-2 -right-52 bg-gray-600 p-3 rounded-md text-white text-sm",
                   {
                     hidden: !showTooltip,
                   }
