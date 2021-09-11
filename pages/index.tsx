@@ -1,5 +1,6 @@
 import {
   faAngleDown,
+  faCopyright,
   faExclamationCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +13,7 @@ import { formatCurrency } from "../utils/locale";
 import Header from "../components/Header";
 import Loading from "../components/Loading";
 import Link from "next/link";
+import Image from "next/image";
 
 type Currency = {
   short: string;
@@ -157,6 +159,7 @@ const Home: NextPage = () => {
         conversion = parseFloat(data.conversion);
       } catch (err) {
         sendError("We failed to convert your input.");
+        setLoading("none");
         return;
       }
       setLoading("none");
@@ -174,7 +177,7 @@ const Home: NextPage = () => {
         action="/api/createTransaction"
         method="POST"
         onSubmit={onSubmit}
-        className="relative z-10 shadow lg:w-2/6 w-full md:w-1/2 text-white text-center bgPrimary p-5 rounded-lg"
+        className="relative z-10 shadow xl:w-1/4 w-full lg:w-1/2 text-white text-center bgPrimary p-5 rounded-lg"
       >
         {hasTransaction && (
           <Link href="/transaction">
@@ -205,7 +208,7 @@ const Home: NextPage = () => {
         {error && (
           <div className="border-2 font-medium border-red-800 bg-red-500 p-3 text-gray-100 bg-opacity-80 rounded-md mb-3 flex flex-col">
             <span className="text-xs text-gray-300 font-normal">
-              There was an issue creating your transaction:
+              There was an issue with your transaction:
             </span>
             {error}
           </div>
@@ -250,7 +253,7 @@ const Home: NextPage = () => {
               <div className="relative justify-center items-center flex">
                 <FontAwesomeIcon icon={faAngleDown} />
                 {showDropDown && (
-                  <div className="absolute top-5 lg:top-8 right-0 lg:right-0 lg:left-2 w-52 z-20">
+                  <div className="absolute top-5 lg:top-8 right-0 lg:right-0 lg:left-2 w-52 z-40">
                     <DropDown
                       close={() => setShowDropDown(false)}
                       setOtherValue={(val) => {
@@ -326,6 +329,36 @@ const Home: NextPage = () => {
           EXCHANGE
         </button>
       </form>
+      <div className="ml-44 z-0 text-center text-white hidden xl:flex flex-col justify-center justify-items-center items-center self-center">
+        <span className="font-bold text-3xl">Purchase using crypto</span>
+        <p className="mt-3 text-md text-gray-400 block w-72 text-center">
+          A fast and secure way to purchase anything on our store using{" "}
+          {currencyOptions.length} popular cryptocurrencies. Fully automated
+          with no verification required.
+        </p>
+        <div className="flex flex-row justify-center mt-5">
+          {currencyOptions.map((currency) => (
+            <div className="ml-2" key={currency.id}>
+              <Image
+                width="32px"
+                height="32px"
+                src={`/icons/${currency.id}.png`}
+                alt={currency.name}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+      <footer className="select-none z-0 absolute bottom-5 font-medium opacity-50 text-gray-800 flex flex-row justify-center items-center justify-items-center">
+        <FontAwesomeIcon className="text-xl lg:text-4xl" icon={faCopyright} />
+        <div className="flex flex-col">
+          <span className="ml-4 text-sm md:text-md">
+            COPYRIGHT 2021 <b>Liam</b>
+            <br />
+            WE ARE NOT AFFILIATED WITH MOJANG AB.
+          </span>
+        </div>
+      </footer>
     </div>
   );
 };

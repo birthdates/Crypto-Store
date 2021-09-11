@@ -2,6 +2,7 @@ import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 export type DropDownItem = {
   name: string;
@@ -44,12 +45,15 @@ export const DropDown: NextPage<{
       close();
     };
     document.addEventListener("click", click);
-  }, []);
+    if (element && element.current && element.current)
+      (element.current as any).style.maxHeight = "1000em";
+  }, [close]);
 
   return (
     <div
       ref={element}
-      className="select-none flex flex-col text-gray-400 bg-gray-800 w-full rounded-md overscroll-y-auto"
+      className="select-none max-h-0 ease-in-out flex flex-col text-gray-400 bg-gray-800 w-full rounded-md overflow-hidden"
+      style={{ transition: "max-height 2s ease-in-out" }}
     >
       {options?.map((option) => (
         <div
@@ -57,8 +61,9 @@ export const DropDown: NextPage<{
           key={option.id}
           onClick={() => setAllValues(option)}
         >
-          <img
-            className="w-8 h-8"
+          <Image
+            width="32px"
+            height="32px"
             src={`/icons/${option.id}.png`}
             alt={`${option.id} Icon`}
           />

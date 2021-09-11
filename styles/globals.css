@@ -24,7 +24,7 @@ body {
   position: absolute;
   content: "";
   background-image: linear-gradient(rgba(0, 0, 0, 0.63), rgba(0, 0, 0, 0.623)),
-    url("/bg.jpg");
+    url("/bg.png");
   background-attachment: scroll;
   background-position: center;
   background-repeat: no-repeat;
