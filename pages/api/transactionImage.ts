@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { Authentication } from "../../utils/authentication";
 import { RateLimit } from "../../utils/ratelimit";
 import { getTransactionImage } from "../../utils/transaction";
 
@@ -13,6 +14,10 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (!(await rateLimit(req, res))) return;
+  if (!Authentication(req, res)) {
+    res.status(403).json({ error: "Forbidden" });
+    return;
+  }
   let imageData: Buffer;
   try {
     imageData = await getTransactionImage(req.cookies.session);

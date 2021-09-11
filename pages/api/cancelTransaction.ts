@@ -17,7 +17,11 @@ export default async function handler(
     res.redirect("/");
     return;
   }
-  if (!(await rateLimit(req, res)) || !Authentication(req, res)) return;
+  if (!(await rateLimit(req, res))) return;
+  if (!Authentication(req, res)) {
+    res.status(403).json({ error: "Forbidden" });
+    return;
+  }
   let success: boolean;
   try {
     success = await cancelTransaction(req.cookies.session);
