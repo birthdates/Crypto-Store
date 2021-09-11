@@ -65,11 +65,12 @@ export const createTransaction = async function (
   currency: string
 ): Promise<RedisSessionData> {
   let transaction: CoinpaymentsCreateTransactionResponse;
+  const curr = currency === "USDT" ? "USDT.TRC20" : currency;
   try {
     transaction = await client.createTransaction({
       amount,
       currency1: "USD",
-      currency2: currency,
+      currency2: curr,
       buyer_email: email,
       item_name: `${amount} USD Store Credit`,
     });
