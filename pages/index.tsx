@@ -177,7 +177,7 @@ const Home: NextPage = () => {
         action="/api/createTransaction"
         method="POST"
         onSubmit={onSubmit}
-        className="relative z-10 shadow xl:w-1/4 w-full lg:w-1/2 text-white text-center bgPrimary p-5 rounded-lg"
+        className="relative z-10 xl:w-1/4 w-full lg:w-1/2 text-white text-center bgPrimary p-5 rounded-lg shadow-2xl"
       >
         {hasTransaction && (
           <Link href="/transaction">
