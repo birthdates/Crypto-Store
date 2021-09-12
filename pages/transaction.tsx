@@ -74,12 +74,12 @@ const Transaction: NextPage = () => {
               </span>
             </div>
           </div>
-          <hr className="bg-gray-700 my-3"></hr>
+          <hr className="border-gray-400 my-3"></hr>
           <span className="text-sm text-gray-400">Exchange Rate</span>
           <span className=" font-medium text-green-500">
             {`${formatCurrency(1 / conversion)} ${status.currency}`} = 1 USD
           </span>
-          <hr className="bg-gray-700 my-3"></hr>
+          <hr className="border-gray-400 my-3"></hr>
           <div className="flex flex-row">
             <div className="flex flex-col">
               <span className="text-sm text-gray-400">Transaction Status</span>

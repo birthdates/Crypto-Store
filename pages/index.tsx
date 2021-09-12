@@ -100,9 +100,7 @@ const Home: NextPage = () => {
   // Send an error via an alert box
   const sendError = (message: string) => {
     setError(message);
-    if (errorTimeout) {
-      clearTimeout(errorTimeout);
-    }
+    if (errorTimeout) clearTimeout(errorTimeout);
     setErrorTimeout(
       setTimeout(() => {
         setError(null);
