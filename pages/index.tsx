@@ -332,7 +332,7 @@ const Home: NextPage = () => {
       <div className="ml-44 z-0 text-center text-white hidden xl:flex flex-col justify-center justify-items-center items-center self-center">
         <span className="font-bold text-3xl">Purchase using crypto</span>
         <p className="mt-3 text-md text-gray-400 block w-72 text-center">
-          A fast and secure way to purchase anything on our store using{" "}
+          A fast and secure way to purchase anything on the store using{" "}
           {currencyOptions.length} popular cryptocurrencies. Fully automated
           with no verification required.
         </p>
