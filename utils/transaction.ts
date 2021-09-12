@@ -200,9 +200,10 @@ export const cancelTransaction = async function (
 };
 
 /**
- * Convert USD to a currency
+ * Convert currency to another currency
  * @param amount Amount of USD
- * @param currency Target currency
+ * @param currency From currency
+ * @param currency2 Target currency
  * @returns Amount in target currency
  */
 export const convertCurrency = async (
