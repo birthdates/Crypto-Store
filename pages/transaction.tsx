@@ -56,7 +56,7 @@ const Transaction: NextPage = () => {
       <Header title="Crypto Exchange Transaction" />
       <div className="bgImage"></div>
       {status && conversion && (
-        <div className="relative z-10 flex flex-col shadow-2xl w-full lg:w-1/2 xl:w-1/4 text-white bgPrimary p-6 rounded-lg">
+        <div className="relative z-10 flex flex-col shadow-2xl w-full lg:w-1/2 2xl:w-1/4 xl:w-3/5 text-white bgPrimary p-6 rounded-lg">
           <Loading loading={loading} />
           <span className="font-bold text-lg">YOUR TRANSACTION</span>
           <span className="font-light text-sm">#{status.id}</span>
