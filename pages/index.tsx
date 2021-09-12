@@ -114,6 +114,7 @@ const Home: NextPage = () => {
   // Called on submit, submit our current form data
   const onSubmit = async (event: any) => {
     event.preventDefault();
+    if (loading !== "none") return;
     setLoading("form");
     let res;
     try {
