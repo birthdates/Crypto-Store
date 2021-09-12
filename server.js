@@ -12,11 +12,12 @@ const httpsOptions = {
 };
 
 app.prepare().then(() => {
+  const port = process.env.PORT || 3000;
   createServer(httpsOptions, (req, res) => {
     const parsedUrl = parse(req.url, true);
     handle(req, res, parsedUrl);
-  }).listen(process.env.PORT || 3000, (err) => {
+  }).listen(port, (err) => {
     if (err) throw err;
-    console.log(`> Server started on https://localhost:${process.env.PORT}`);
+    console.log(`> Server started on https://localhost:${port}`);
   });
 });

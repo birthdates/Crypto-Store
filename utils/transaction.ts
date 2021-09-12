@@ -6,6 +6,19 @@ import { client } from "./coinpayments";
 import { get, redisClient } from "./redis";
 
 /**
+ * Data for cached currencies (saves requests)
+ */
+type CachedCurrency = {
+  value: number;
+  expiry: number;
+};
+
+/**
+ * Our map of cached currencies (pair -> conversion multplier)
+ */
+const currencyCache: Map<String, CachedCurrency> = new Map();
+
+/**
  * Redis transaction
  */
 export type RedisSessionData = {
@@ -65,11 +78,12 @@ export const createTransaction = async function (
   currency: string
 ): Promise<RedisSessionData> {
   let transaction: CoinpaymentsCreateTransactionResponse;
+  const curr = currency === "USDT" ? "USDT.TRC20" : currency;
   try {
     transaction = await client.createTransaction({
       amount,
       currency1: "USD",
-      currency2: currency,
+      currency2: curr,
       buyer_email: email,
       item_name: `${amount} USD Store Credit`,
     });
@@ -162,7 +176,7 @@ export const getTransaction = async function (
   session: string
 ): Promise<RedisSessionData> {
   const rawSessionData = await get(getRedisKey(session));
-  if (rawSessionData == null) throw "Invalid session";
+  if (rawSessionData == null) throw "Forbidden";
   try {
     return JSON.parse(rawSessionData) as RedisSessionData;
   } catch (err) {
@@ -186,9 +200,10 @@ export const cancelTransaction = async function (
 };
 
 /**
- * Convert USD to a currency
+ * Convert currency to another currency
  * @param amount Amount of USD
- * @param currency Target currency
+ * @param currency From currency
+ * @param currency2 Target currency
  * @returns Amount in target currency
  */
 export const convertCurrency = async (
@@ -205,10 +220,19 @@ export const convertCurrency = async (
       ? "LTC"
       : currency2
     : "USD";
+  const id = curr + curr2;
+  const cache = currencyCache.get(id);
+  if (cache && cache.expiry > Date.now()) {
+    return cache.value * amount;
+  }
   const resp = await fetch(
     `https://min-api.cryptocompare.com/data/price?fsym=${curr}&tsyms=${curr2}`
   );
   const data = await resp.json();
-  if (data.Message) throw "Invalid currency";
+  if (data.Message || !data.USD) throw "Invalid currency";
+  currencyCache.set(id, {
+    value: data.USD,
+    expiry: Date.now() + 1000 * 60 * 10, // Expire in 10 minutes
+  });
   return data.USD * amount;
 };

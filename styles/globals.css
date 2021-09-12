@@ -18,6 +18,15 @@ body {
   --secondary-color: #2e5792;
 }
 
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
 .bgImage {
   width: 105%;
   height: 105%;

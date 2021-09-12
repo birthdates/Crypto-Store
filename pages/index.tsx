@@ -114,6 +114,7 @@ const Home: NextPage = () => {
   // Called on submit, submit our current form data
   const onSubmit = async (event: any) => {
     event.preventDefault();
+    if (loading !== "none") return;
     setLoading("form");
     let res;
     try {
@@ -177,7 +178,7 @@ const Home: NextPage = () => {
         action="/api/createTransaction"
         method="POST"
         onSubmit={onSubmit}
-        className="relative z-10 shadow xl:w-1/4 w-full lg:w-1/2 text-white text-center bgPrimary p-5 rounded-lg"
+        className="relative z-10 xl:w-1/4 w-full lg:w-1/2 text-white text-center bgPrimary p-5 rounded-lg shadow-2xl"
       >
         {hasTransaction && (
           <Link href="/transaction">
@@ -253,7 +254,7 @@ const Home: NextPage = () => {
               <div className="relative justify-center items-center flex">
                 <FontAwesomeIcon icon={faAngleDown} />
                 {showDropDown && (
-                  <div className="absolute top-5 lg:top-8 right-0 lg:right-0 lg:left-2 w-52 z-40">
+                  <div className="absolute top-5 lg:top-8 right-0 lg:right-0 lg:left-2 w-52 lg:w-64 z-40">
                     <DropDown
                       close={() => setShowDropDown(false)}
                       setOtherValue={(val) => {
@@ -332,7 +333,7 @@ const Home: NextPage = () => {
       <div className="ml-44 z-0 text-center text-white hidden xl:flex flex-col justify-center justify-items-center items-center self-center">
         <span className="font-bold text-3xl">Purchase using crypto</span>
         <p className="mt-3 text-md text-gray-400 block w-72 text-center">
-          A fast and secure way to purchase anything on our store using{" "}
+          A fast and secure way to purchase anything on the store using{" "}
           {currencyOptions.length} popular cryptocurrencies. Fully automated
           with no verification required.
         </p>
