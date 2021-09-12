@@ -176,7 +176,7 @@ export const getTransaction = async function (
   session: string
 ): Promise<RedisSessionData> {
   const rawSessionData = await get(getRedisKey(session));
-  if (rawSessionData == null) throw "Invalid session";
+  if (rawSessionData == null) throw "Forbidden";
   try {
     return JSON.parse(rawSessionData) as RedisSessionData;
   } catch (err) {

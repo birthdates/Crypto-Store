@@ -32,7 +32,7 @@ export default async function handler(
     transaction = await getTransaction(req.cookies.session);
     if (!transaction) throw "Invalid transaction";
   } catch (err) {
-    res.status(400).json({ error: err });
+    res.status(403).json({ error: err });
     return;
   }
 
