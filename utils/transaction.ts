@@ -6,6 +6,19 @@ import { client } from "./coinpayments";
 import { get, redisClient } from "./redis";
 
 /**
+ * Data for cached currencies (saves requests)
+ */
+type CachedCurrency = {
+  value: number;
+  expiry: number;
+};
+
+/**
+ * Our map of cached currencies (pair -> conversion multplier)
+ */
+const currencyCache: Map<String, CachedCurrency> = new Map();
+
+/**
  * Redis transaction
  */
 export type RedisSessionData = {
@@ -206,10 +219,19 @@ export const convertCurrency = async (
       ? "LTC"
       : currency2
     : "USD";
+  const id = curr + curr2;
+  const cache = currencyCache.get(id);
+  if (cache && cache.expiry > Date.now()) {
+    return cache.value * amount;
+  }
   const resp = await fetch(
     `https://min-api.cryptocompare.com/data/price?fsym=${curr}&tsyms=${curr2}`
   );
   const data = await resp.json();
-  if (data.Message) throw "Invalid currency";
+  if (data.Message || !data.USD) throw "Invalid currency";
+  currencyCache.set(id, {
+    value: data.USD,
+    expiry: Date.now() + 1000 * 60 * 10, // Expire in 10 minutes
+  });
   return data.USD * amount;
 };

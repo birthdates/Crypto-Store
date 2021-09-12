@@ -15,10 +15,12 @@ export const DropDown: NextPage<{
   close: () => void;
   setOtherValue: (value: DropDownItem) => void;
 }> = ({ options, defaultValue, close, setOtherValue }) => {
+  // States
   const getValue = (id?: string) => options?.find((val) => val.id === id);
   const [value, setValue] = useState(getValue(defaultValue));
   const element = useRef(null);
 
+  // Check if the given element is a descendant of the parent
   const isDescendant = (parent: HTMLElement, child: HTMLElement): boolean => {
     if (parent === child) return true;
     var node = child.parentNode;
@@ -31,11 +33,13 @@ export const DropDown: NextPage<{
     return false;
   };
 
+  // Set both the state & the value from the parent
   const setAllValues = (value: DropDownItem) => {
     setValue(value);
     setOtherValue(value);
   };
 
+  // Add listeners & animation
   useEffect(() => {
     const click = (event: MouseEvent) => {
       if (isDescendant(element.current as any, event.target as any)) {
@@ -52,8 +56,8 @@ export const DropDown: NextPage<{
   return (
     <div
       ref={element}
-      className="select-none max-h-0 ease-in-out flex flex-col text-gray-400 bg-gray-800 w-full rounded-md overflow-hidden"
-      style={{ transition: "max-height 2s ease-in-out" }}
+      className="select-none max-h-0 ease-in-out flex flex-col text-gray-400 bg-gray-800 w-full rounded-md overflow-x-hidden overflow-y-scroll"
+      style={{ transition: "max-height 2.5s ease-in-out" }}
     >
       {options?.map((option) => (
         <div
