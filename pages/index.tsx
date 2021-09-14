@@ -15,11 +15,6 @@ import Loading from "../components/Loading";
 import Link from "next/link";
 import Image from "next/image";
 
-type Currency = {
-  short: string;
-  name: string;
-};
-
 const Home: NextPage = () => {
   const currencyOptions: Array<DropDownItem> = [
     { name: "Bitcoin", id: "BTC" },
@@ -36,8 +31,8 @@ const Home: NextPage = () => {
     currencyOptions.push({ name: "Litcoin Test", id: "LTCT" });
 
   // Current selected currency (input)
-  const [currency, setCurrency] = useState<Currency>({
-    short: "BTC",
+  const [currency, setCurrency] = useState<DropDownItem>({
+    id: "BTC",
     name: "Bitcoin",
   });
 
@@ -74,7 +69,7 @@ const Home: NextPage = () => {
   const cryptoRef = useRef<HTMLInputElement>();
 
   // Set our selected currency and cache it
-  const setCurrencyPersistent = (currency: Currency) => {
+  const setCurrencyPersistent = (currency: DropDownItem) => {
     setCurrency(currency);
     localStorage.setItem("currency", JSON.stringify(currency));
   };
@@ -100,9 +95,7 @@ const Home: NextPage = () => {
   // Send an error via an alert box
   const sendError = (message: string) => {
     setError(message);
-    if (errorTimeout) {
-      clearTimeout(errorTimeout);
-    }
+    if (errorTimeout) clearTimeout(errorTimeout);
     setErrorTimeout(
       setTimeout(() => {
         setError(null);
@@ -178,7 +171,7 @@ const Home: NextPage = () => {
         action="/api/createTransaction"
         method="POST"
         onSubmit={onSubmit}
-        className="relative z-10 xl:w-1/4 w-full lg:w-1/2 text-white text-center bgPrimary p-5 rounded-lg shadow-2xl"
+        className="relative z-10 xl:w-1/2 2xl:w-1/4 w-full lg:w-1/2 text-white text-center bgPrimary p-5 rounded-lg shadow-2xl"
       >
         {hasTransaction && (
           <Link href="/transaction">
@@ -227,7 +220,7 @@ const Home: NextPage = () => {
               onChange={(event) =>
                 onInputChange(
                   parseFloat(event.target.value),
-                  currency.short,
+                  currency.id,
                   usdRef.current as any,
                   false
                 )
@@ -245,11 +238,11 @@ const Home: NextPage = () => {
               <div className="mr-3 text-right">
                 <input
                   type="hidden"
-                  value={currency.short}
+                  value={currency.id}
                   name="currency"
                 ></input>
                 <p className="text-sm text-gray-400">{currency.name}</p>
-                <span className="font-bold text-lg">{currency.short}</span>
+                <span className="font-bold text-lg">{currency.id}</span>
               </div>
               <div className="relative justify-center items-center flex">
                 <FontAwesomeIcon icon={faAngleDown} />
@@ -258,11 +251,8 @@ const Home: NextPage = () => {
                     <DropDown
                       close={() => setShowDropDown(false)}
                       setOtherValue={(val) => {
-                        if (val.id === currency.short) return;
-                        setCurrencyPersistent({
-                          short: val.id,
-                          name: val.name,
-                        });
+                        if (val.id === currency.id) return;
+                        setCurrencyPersistent(val);
                         onInputChange(
                           cryptoRef.current?.value as any,
                           val.id,
@@ -271,7 +261,7 @@ const Home: NextPage = () => {
                         );
                       }}
                       options={currencyOptions}
-                      defaultValue={currency.short}
+                      defaultValue={currency.id}
                     />
                   </div>
                 )}
@@ -295,7 +285,7 @@ const Home: NextPage = () => {
               onChange={(event) =>
                 onInputChange(
                   parseFloat(event.target.value),
-                  currency.short,
+                  currency.id,
                   cryptoRef.current as any,
                   true
                 )

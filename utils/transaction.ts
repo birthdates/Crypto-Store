@@ -3,13 +3,13 @@ import {
   CoinpaymentsGetTxResponse,
 } from "coinpayments/dist/types/response";
 import { client } from "./coinpayments";
-import { get, redisClient } from "./redis";
+import { del, get, redisClient } from "./redis";
 
 /**
  * Data for cached currencies (saves requests)
  */
 type CachedCurrency = {
-  value: number;
+  conversion: number;
   expiry: number;
 };
 
@@ -193,11 +193,19 @@ export const cancelTransaction = async function (
   session: string
 ): Promise<boolean> {
   const values = await Promise.all([
-    redisClient.del(getRedisKey(session)),
-    redisClient.del(getTransactionRedisKey(session)),
+    del(getRedisKey(session)),
+    del(getTransactionRedisKey(session)),
   ]);
-  return values.find((v) => v);
+  return values.find((v) => v) === true;
 };
+
+/**
+ * Get the currency or LTC if LTCT
+ */
+const getCurrency = (currency: string): string =>
+  currency === "LTCT" && process.env.NODE_ENV === "development"
+    ? "LTC"
+    : currency;
 
 /**
  * Convert currency to another currency
@@ -211,19 +219,13 @@ export const convertCurrency = async (
   currency: string,
   currency2?: string
 ): Promise<number> => {
-  const curr =
-    currency === "LTCT" && process.env.NODE_ENV === "development"
-      ? "LTC"
-      : currency;
-  const curr2 = currency2
-    ? currency2 === "LTCT" && process.env.NODE_ENV === "development"
-      ? "LTC"
-      : currency2
-    : "USD";
+  const curr = getCurrency(currency);
+  const curr2 = currency2 ? getCurrency(currency2) : "USD";
   const id = curr + curr2;
   const cache = currencyCache.get(id);
-  if (cache && cache.expiry > Date.now()) {
-    return cache.value * amount;
+  const now = Date.now();
+  if (cache && cache.expiry > now) {
+    return cache.conversion * amount;
   }
   const resp = await fetch(
     `https://min-api.cryptocompare.com/data/price?fsym=${curr}&tsyms=${curr2}`
@@ -231,8 +233,8 @@ export const convertCurrency = async (
   const data = await resp.json();
   if (data.Message || !data.USD) throw "Invalid currency";
   currencyCache.set(id, {
-    value: data.USD,
-    expiry: Date.now() + 1000 * 60 * 10, // Expire in 10 minutes
+    conversion: data.USD,
+    expiry: now + 1000 * 60 * 10, // Expire in 10 minutes
   });
   return data.USD * amount;
 };

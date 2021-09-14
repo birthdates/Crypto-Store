@@ -56,7 +56,7 @@ const Transaction: NextPage = () => {
       <Header title="Crypto Exchange Transaction" />
       <div className="bgImage"></div>
       {status && conversion && (
-        <div className="relative z-10 flex flex-col shadow-2xl w-full lg:w-1/2 xl:w-1/4 text-white bgPrimary p-6 rounded-lg">
+        <div className="relative z-10 flex flex-col shadow-2xl w-full lg:w-1/2 2xl:w-1/4 xl:w-3/5 text-white bgPrimary p-6 rounded-lg">
           <Loading loading={loading} />
           <span className="font-bold text-lg">YOUR TRANSACTION</span>
           <span className="font-light text-sm">#{status.id}</span>
@@ -74,12 +74,12 @@ const Transaction: NextPage = () => {
               </span>
             </div>
           </div>
-          <hr className="bg-gray-700 my-3"></hr>
+          <hr className="border-gray-400 my-3"></hr>
           <span className="text-sm text-gray-400">Exchange Rate</span>
           <span className=" font-medium text-green-500">
             {`${formatCurrency(1 / conversion)} ${status.currency}`} = 1 USD
           </span>
-          <hr className="bg-gray-700 my-3"></hr>
+          <hr className="border-gray-400 my-3"></hr>
           <div className="flex flex-row">
             <div className="flex flex-col">
               <span className="text-sm text-gray-400">Transaction Status</span>

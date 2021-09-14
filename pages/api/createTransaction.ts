@@ -17,6 +17,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (req.method !== "POST") {
+    res.redirect("/");
+    return;
+  }
   if (!(await rateLimit(req, res))) return;
   if (!req.body.amount || !req.body.currency || req.body.amount <= 0) {
     res.status(400).json({ error: "Missing fields" });
