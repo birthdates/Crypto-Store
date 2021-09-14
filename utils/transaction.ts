@@ -3,7 +3,7 @@ import {
   CoinpaymentsGetTxResponse,
 } from "coinpayments/dist/types/response";
 import { client } from "./coinpayments";
-import { get, redisClient } from "./redis";
+import { del, get, redisClient } from "./redis";
 
 /**
  * Data for cached currencies (saves requests)
@@ -193,10 +193,10 @@ export const cancelTransaction = async function (
   session: string
 ): Promise<boolean> {
   const values = await Promise.all([
-    redisClient.del(getRedisKey(session)),
-    redisClient.del(getTransactionRedisKey(session)),
+    del(getRedisKey(session)),
+    del(getTransactionRedisKey(session)),
   ]);
-  return values.find((v) => v);
+  return values.find((v) => v) === true;
 };
 
 /**

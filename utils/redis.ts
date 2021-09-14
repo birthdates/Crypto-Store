@@ -13,7 +13,7 @@ export const incr = function (key: string): Promise<number> {
   });
 };
 
-export const del = function (key: string): Promise<number> {
+export const del = function (key: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
     redisClient.del(key, (err: any, reply: any) => {
       if (err) {
