@@ -21,7 +21,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (!rateLimit(req, res)) return;
+  if (!(await rateLimit(req, res))) return;
   if (!Authentication(req, res)) {
     res.status(403).json({ error: "Forbidden" });
     return;
