@@ -203,7 +203,9 @@ export const cancelTransaction = async function (
  * Get the currency or LTC if LTCT
  */
 const getCurrency = (currency: string): string =>
-  "LTCT" && process.env.NODE_ENV === "development" ? "LTC" : currency;
+  currency === "LTCT" && process.env.NODE_ENV === "development"
+    ? "LTC"
+    : currency;
 
 /**
  * Convert currency to another currency
@@ -220,6 +222,7 @@ export const convertCurrency = async (
   const curr = getCurrency(currency);
   const curr2 = currency2 ? getCurrency(currency2) : "USD";
   const id = curr + curr2;
+  console.info(curr, curr2, id);
   const cache = currencyCache.get(id);
   const now = Date.now();
   if (cache && cache.expiry > now) {
