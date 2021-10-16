@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
-import { useEffect, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { DropDown, DropDownItem } from "../components/DropDown";
 import { formatCurrency } from "../utils/locale";
 import Header from "../components/Header";
@@ -26,6 +26,10 @@ const Home: NextPage = () => {
     { name: "Tether", id: "USDT" },
     { name: "Ripple", id: "XRP" },
   ];
+  // Cache conversion requests
+  const cachedConversions: MutableRefObject<Map<String, number>> = useRef(
+    new Map()
+  );
 
   if (process.env.NODE_ENV !== "production")
     currencyOptions.push({ name: "Litcoin Test", id: "LTCT" });
@@ -148,10 +152,15 @@ const Home: NextPage = () => {
       let conversion: number;
       try {
         setLoading(!usd ? "usd" : "crypto");
-        const res = await fetch(`/api/conversion?currency=${to}`);
-        const data = await res.json();
-        conversion = parseFloat(data.conversion);
+        const cached = cachedConversions.current.get(to);
+        if (!cached) {
+          const res = await fetch(`/api/conversion?currency=${to}`);
+          const data = await res.json();
+          conversion = parseFloat(data.conversion);
+          cachedConversions.current.set(to, conversion);
+        } else conversion = cached;
       } catch (err) {
+        console.error(err);
         sendError("We failed to convert your input.");
         setLoading("none");
         return;
