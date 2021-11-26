@@ -26,5 +26,6 @@ export default async function handler(
     return;
   }
   res.setHeader("Content-Type", "image/png");
+  res.setHeader("Cache-Control", "no-cache");
   res.status(200).send(imageData);
 }

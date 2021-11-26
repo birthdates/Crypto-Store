@@ -99,7 +99,8 @@ export const createTransaction = async function (
     completed: false,
     wallet: transaction.address,
   };
-  await redisClient.set(getRedisKey(session), JSON.stringify(data));
+  // Set session token -> transaction data in Redis and expire in 30 days
+  redisClient.set(getRedisKey(session), JSON.stringify(data), "EX", 2592000);
   return data;
 };
 
