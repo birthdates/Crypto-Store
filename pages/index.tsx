@@ -27,7 +27,7 @@ const Home: NextPage = () => {
     { name: "Ripple", id: "XRP" },
   ];
   // Cache conversion requests
-  const cachedConversions: MutableRefObject<Map<String, number>> = useRef(
+  const cachedConversions: MutableRefObject<Map<string, number>> = useRef(
     new Map()
   );
 
