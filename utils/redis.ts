@@ -1,4 +1,4 @@
-import redis from "redis";
+const redis = require("redis");
 export const redisClient = redis.createClient();
 
 export const incr = function (key: string): Promise<number> {
