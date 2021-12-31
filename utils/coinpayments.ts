@@ -11,7 +11,7 @@ export let client: Coinpayments;
 try {
   client = new Coinpayments({ key, secret });
 } catch (err) {
-  console.error(err);
+  console.warn(err);
 }
 
 /**
