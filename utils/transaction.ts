@@ -105,6 +105,50 @@ export const createTransaction = async function (
 };
 
 /**
+ * Fetch transaction status from session token
+ *
+ * @param session Session token
+ * @returns Transaction status
+ */
+export const fetchTransactionStatus = async (
+  session: string
+): Promise<null | { error: string } | TransactionWithStatus> => {
+  if (!session) return null;
+  let transaction: RedisSessionData;
+  try {
+    transaction = await getTransaction(session);
+    if (!transaction) throw "Invalid transaction";
+  } catch (err) {
+    return { error: err as string };
+  }
+
+  const rawTransactionStatus = await get(
+    getTransactionRedisKey(transaction.id)
+  );
+  let status: TransactionStatus;
+  try {
+    status = JSON.parse(rawTransactionStatus) as TransactionStatus;
+    if (status === null) {
+      const webStatus = await getTransactionStatus(transaction.id);
+      status = {
+        amount: parseFloat(webStatus.amountf),
+        received: parseFloat(webStatus.receivedf),
+        status: webStatus.status,
+        status_text: statusToMessage(webStatus.status),
+      };
+    }
+  } catch (err) {
+    return { error: "Invalid transaction" };
+  }
+  return {
+    id: transaction.id,
+    currency: transaction.currency,
+    wallet: transaction.wallet,
+    ...status,
+  } as any;
+};
+
+/**
  * Get transaction status from Coinpayments
  * @param txid Transaction ID
  * @returns Transaction status
