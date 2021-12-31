@@ -5,7 +5,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { DropDown, DropDownItem } from "../components/DropDown";
@@ -14,8 +14,20 @@ import Header from "../components/Header";
 import Loading from "../components/Loading";
 import Link from "next/link";
 import Image from "next/image";
+import { fetchTransactionStatus } from "../utils/transaction";
 
-const Home: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const status = (await fetchTransactionStatus(
+    context.req.cookies.session
+  )) as any;
+  return {
+    props: {
+      hasTransaction: !!status && !status.error,
+    },
+  };
+};
+
+const Home: NextPage<{ hasTransaction: boolean }> = ({ hasTransaction }) => {
   const currencyOptions: Array<DropDownItem> = [
     { name: "Bitcoin", id: "BTC" },
     { name: "Ethereum", id: "ETH" },
@@ -55,18 +67,7 @@ const Home: NextPage = () => {
   const [error, setError] = useState<any>(null);
   const [errorTimeout, setErrorTimeout] = useState<any>(null);
   const [loading, setLoading] = useState("none");
-  const [hasTransaction, setHasTransaction] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
-
-  // Try to fetch if we already have an open transaction
-  useEffect(() => {
-    fetch("/api/transactionStatus")
-      .then((data) => data.json())
-      .then((data) => {
-        setHasTransaction(!!data && !data.error);
-      })
-      .catch(() => {});
-  }, []);
 
   // Ref for the USD & Crypto input
   const usdRef = useRef<HTMLInputElement>();

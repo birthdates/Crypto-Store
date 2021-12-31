@@ -1,17 +1,44 @@
 import { faClipboard } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Loading from "../components/Loading";
 import { formatCurrency } from "../utils/locale";
-import { TransactionWithStatus } from "../utils/transaction";
+import {
+  fetchTransactionStatus,
+  TransactionWithStatus,
+} from "../utils/transaction";
 
-const Transaction: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // Get transaction status from session token
+  const transactionStatus = (await fetchTransactionStatus(
+    context.req.cookies.session
+  )) as any;
+
+  // If no transaction status, redirect to home
+  if (!transactionStatus || transactionStatus.error) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {
+      transaction: transactionStatus,
+    },
+  };
+};
+
+const Transaction: NextPage<{ transaction: TransactionWithStatus }> = ({
+  transaction,
+}) => {
   // States
   const router = useRouter();
-  const [status, setStatus] = useState<TransactionWithStatus>(null as any);
+  const [status, setStatus] = useState<TransactionWithStatus>(transaction);
   const [conversion, setConversion] = useState<number>(null as any);
   const [loading, setLoading] = useState(false);
 
@@ -26,18 +53,23 @@ const Transaction: NextPage = () => {
           if (res.status !== 200) throw "Fail";
           return res.json();
         })
-        .then((data: TransactionWithStatus) => {
-          setStatus(data);
-          fetch(`/api/conversion?currency=${data.currency}`)
-            .then((data) => data.json())
-            .then((data) => setConversion(data.conversion));
-        })
+        .then((data: TransactionWithStatus) => setStatus(data))
         .catch(() => router.push("/"));
     };
 
-    const interval = setInterval(fetchStatus, 10000);
-    fetchStatus();
-    return () => clearInterval(interval);
+    const fetchCurrency = () => {
+      fetch(`/api/conversion?currency=${status.currency}`)
+        .then((data) => data.json())
+        .then((data) => setConversion(data.conversion));
+    };
+
+    fetchCurrency();
+    const statusInterval = setInterval(fetchStatus, 10000); // 10 seconds
+    const currencyInterval = setInterval(fetchCurrency, 1000 * 60 * 15); // 15 minutes
+    return () => {
+      clearInterval(statusInterval);
+      clearInterval(currencyInterval);
+    };
   }, []);
 
   // Cancel our current transaction then redirect to the main page.
