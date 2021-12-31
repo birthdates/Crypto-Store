@@ -17,10 +17,9 @@ import Image from "next/image";
 import { fetchTransactionStatus } from "../utils/transaction";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  let status;
-  try {
-    status = (await fetchTransactionStatus(context.req.cookies.session)) as any;
-  } catch (err) {}
+  const status = (await fetchTransactionStatus(
+    context.req.cookies.session
+  )) as any;
   return {
     props: {
       hasTransaction: !!status && !status.error,

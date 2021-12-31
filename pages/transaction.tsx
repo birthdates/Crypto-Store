@@ -13,12 +13,9 @@ import {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // Get transaction status from session token
-  let transactionStatus;
-  try {
-    transactionStatus = (await fetchTransactionStatus(
-      context.req.cookies.session
-    )) as any;
-  } catch (err) {}
+  const transactionStatus = (await fetchTransactionStatus(
+    context.req.cookies.session
+  )) as any;
 
   // If no transaction status, redirect to home
   if (!transactionStatus || transactionStatus.error) {
