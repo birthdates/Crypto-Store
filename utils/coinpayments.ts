@@ -6,7 +6,13 @@ const secret = process.env.COIN_SECRET as string;
 const merchantID = process.env.COIN_MERCHANT_ID as string;
 const ipnSecret = process.env.COIN_IPN_SECRET as string;
 
-export const client = new Coinpayments({ key, secret });
+export let client: Coinpayments;
+
+try {
+  client = new Coinpayments({ key, secret });
+} catch (err) {
+  console.error(err);
+}
 
 /**
  * Check if the provided IPN HMAC is valid
