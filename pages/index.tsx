@@ -354,7 +354,7 @@ const Home: NextPage<{ hasTransaction: boolean }> = ({ hasTransaction }) => {
         <FontAwesomeIcon className="text-xl lg:text-4xl" icon={faCopyright} />
         <div className="flex flex-col">
           <span className="ml-4 text-sm md:text-md">
-            COPYRIGHT 2021 <b>Liam</b>
+            COPYRIGHT {new Date().getFullYear()} <b>Liam</b>
             <br />
             WE ARE NOT AFFILIATED WITH MOJANG AB.
           </span>
