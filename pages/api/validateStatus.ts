@@ -54,13 +54,6 @@ export default async function handler(
       return;
     }
 
-    // If transaction doesn't exist, expire it on CoinPayments (in case it's been cancelled)
-    const key = getTransactionRedisKey(txn_id);
-    if (!(await get(key))) {
-      res.status(400).json({ error: "Invalid transaction!" });
-      return;
-    }
-
     // Generate giftcard if applicable
     const cardObj =
       status === "2" || status === "100"
@@ -72,6 +65,8 @@ export default async function handler(
         : undefined;
 
     // Update status
+    const key = getTransactionRedisKey(txn_id);
+
     redisClient.set(
       key,
       JSON.stringify({
