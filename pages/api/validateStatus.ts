@@ -58,7 +58,7 @@ export default async function handler(
     const cardObj =
       status === "2" || status === "100"
         ? {
-            card: generateGiftcard(
+            card: await generateGiftcard(
               (await convertCurrency(amount as any, "USD", currency)).toString()
             ),
           }
